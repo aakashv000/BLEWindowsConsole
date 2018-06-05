@@ -20,4 +20,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="UwpDesktop" Version="10.0.14393.3" />
+  </ItemGroup>
+
 </Project>

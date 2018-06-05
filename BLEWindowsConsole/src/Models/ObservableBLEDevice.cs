@@ -31,6 +31,9 @@ namespace BLEWindowsConsole.src.Models
         public string btAddress;
         public bool isPaired;
         public bool isConnected;
+        private GattDeviceServicesResult result;
+        public ObservableCollection<ObservableGattDeviceService> services = new ObservableCollection<ObservableGattDeviceService>();
+        public int serviceCount;
 
         public BluetoothLEDevice BLEDevice
         {
@@ -96,33 +99,27 @@ namespace BLEWindowsConsole.src.Models
                     if (result.Status == GattCommunicationStatus.Success)
                     {
                         // In case we connected before, clear the service list and recreate it
-                        Services.Clear();
+                        services.Clear();
 
-                        System.Diagnostics.Debug.WriteLine(debugMsg + "GetGattServiceAsync SUCCESS");
+                        Console.WriteLine("GetGattServiceAsync SUCCESS");
                         foreach (var serv in result.Services)
                         {
-                            Services.Add(new ObservableGattDeviceService(serv));
+                            services.Add(new ObservableGattDeviceService(serv));
                         }
 
-                        ServiceCount = Services.Count();
+                        serviceCount = services.Count();
                         ret = true;
                     }
                     else if (result.Status == GattCommunicationStatus.ProtocolError)
                     {
-                        ErrorText = debugMsg + "GetGattServiceAsync Error: Protocol Error - " + result.ProtocolError.Value;
-                        System.Diagnostics.Debug.WriteLine(ErrorText);
-                        string msg = "Connection protocol error: " + result.ProtocolError.Value.ToString();
-                        var messageDialog = new MessageDialog(msg, "Connection failures");
-                        await messageDialog.ShowAsync();
+                        Console.WriteLine("GetGattServiceAsync Error: Protocol Error - " + result.ProtocolError.Value);
+                        Console.WriteLine("Connection protocol error: " + result.ProtocolError.Value.ToString());
 
                     }
                     else if (result.Status == GattCommunicationStatus.Unreachable)
                     {
-                        ErrorText = debugMsg + "GetGattServiceAsync Error: Unreachable";
-                        System.Diagnostics.Debug.WriteLine(ErrorText);
-                        string msg = "Device unreachable";
-                        var messageDialog = new MessageDialog(msg, "Connection failures");
-                        await messageDialog.ShowAsync();
+                        Console.WriteLine("GetGattServiceAsync Error: Unreachable");
+                        Console.WriteLine("Device unreachable");
                     }
                 }
             }
