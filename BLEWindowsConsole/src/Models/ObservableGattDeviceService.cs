@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BLEWindowsConsole.src.Services.GattUuidsService;
@@ -12,7 +13,7 @@ namespace BLEWindowsConsole.src.Models
         private GattDeviceService service;
         private string name;
         private string uuid;
-        private ObservableCollection<ObservableGattCharacteristics> characteristics = 
+        private ObservableCollection<ObservableGattCharacteristics> characteristics = new ObservableCollection<ObservableGattCharacteristics>();
 
         public ObservableGattDeviceService( GattDeviceService service)
         {
@@ -38,14 +39,43 @@ namespace BLEWindowsConsole.src.Models
                 }
 
                 CancellationTokenSource tokenSource = new CancellationTokenSource(5000);
-                var t = Task.Run(() => service.GetCharacteristicsAsync(Windows.Devices.Bluetooth.BluetoothCacheMode.Uncached), tokenSource.Token);
+                var task = Task.Run(() => service.GetCharacteristicsAsync(Windows.Devices.Bluetooth.BluetoothCacheMode.Uncached), tokenSource.Token);
 
                 GattCharacteristicsResult result = null;
-                result = await t.Result;
-            }
-            catch
-            {
+                result = await task.Result;
 
+                if(result.Status == GattCommunicationStatus.Success)
+                {
+                    Console.WriteLine("getAllCharacteristics found " + result.Characteristics.Count() + " characteristics");
+
+                    foreach( GattCharacteristic gattChar in result.Characteristics)
+                    {
+                        characteristics.Add(new ObservableGattCharacteristics(gattChar, this));
+                    }
+                }
+                else if( result.Status == GattCommunicationStatus.Unreachable)
+                {
+                    Console.WriteLine("getAllCharacteristics failed with Unreachable");
+                }
+                else if(result.Status == GattCommunicationStatus.ProtocolError)
+                {
+                    Console.WriteLine("getAllCharacteristics failed with Unreachable");
+                }
+            }
+            catch( AggregateException ae)
+            {
+                foreach(var ex in ae.InnerExceptions)
+                {
+                    if(ex is TaskCanceledException){
+                        Console.WriteLine("Getting characteristics took too long. Timed out.");
+                        return;
+                    }
+                }
+            }
+            catch( Exception ex)
+            {
+                Console.WriteLine("getAllCharacteristics: Exception: " + ex.Message);
+                throw;
             }
         }
     }

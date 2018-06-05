@@ -1,25 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
 
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using BluetoothLEExplorer.Services.DispatcherService;
-using Windows.Devices.Bluetooth;
-using Windows.Devices.Bluetooth.GenericAttributeProfile;
-using Windows.Devices.Enumeration;
-using Windows.UI.Popups;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.Foundation.Metadata;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace BLEWindowsConsole.src.Models
 {
@@ -123,6 +111,22 @@ namespace BLEWindowsConsole.src.Models
                     }
                 }
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Exception - " + ex.Message);
+                Debugger.Break();
+            }
+
+            if (ret)
+            {
+                Console.WriteLine("Exiting(0)");
+            }
+            else
+            {
+                Console.WriteLine("Exiting(-1)");
+            }
+
+            return ret;
         }
     }
 }
