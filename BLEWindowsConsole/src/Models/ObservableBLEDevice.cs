@@ -16,12 +16,13 @@ namespace BLEWindowsConsole.src.Models
         private BluetoothLEDevice _BLEDevice;
         public DeviceInformation deviceInfo;
         public string name;
-        public string btAddress;
+        public string bluetoothAddressAsString;
         public bool isPaired;
         public bool isConnected;
         private GattDeviceServicesResult result;
         public ObservableCollection<ObservableGattDeviceService> services = new ObservableCollection<ObservableGattDeviceService>();
         public int serviceCount;
+        public ulong bluetoothAddressAsUlong;
 
         public BluetoothLEDevice BLEDevice
         {
@@ -42,7 +43,8 @@ namespace BLEWindowsConsole.src.Models
 
             if( deviceInfo.Properties.ContainsKey( "System.Devices.Aep.DeviceAddress"))
             {
-                btAddress = deviceInfo.Properties["System.Devices.Aep.DeviceAddress"].ToString();
+                bluetoothAddressAsString = deviceInfo.Properties["System.Devices.Aep.DeviceAddress"].ToString();
+                bluetoothAddressAsUlong = Convert.ToUInt64(bluetoothAddressAsString.Replace(":", string.Empty), 16);
             }
 
             isPaired = deviceInfo.Pairing.IsPaired;
