@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,6 +10,32 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.3.0" />
+    <PackageReference Include="UwpDesktop" Version="10.0.14393.3" />
+  </ItemGroup>
+
+  <!--##### removed(commented out) the below assembly references and included the 2 above packages directly from NuGet, to remove the
+        Exception: could not load file or assembly 'System.Runtime.WindowsRuntime'. Reference assemblies should not be loaded for execution. They can only be loaded in the Reflection-only loader context-->
+  
+  <ItemGroup>
+    <!--<Reference Include="System.Runtime">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.0.0\ref\netcoreapp2.0\System.Runtime.dll</HintPath>
+    </Reference>-->
+    <!--<Reference Include="System.Runtime">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.dll</HintPath>
+    </Reference>-->
+    <!--<Reference Include="System.Runtime.WindowsRuntime">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETPortable\v4.6\System.Runtime.WindowsRuntime.dll</HintPath>
+    </Reference>-->
+    <!--<Reference Include="System.Runtime">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.dll</HintPath>
+    </Reference>-->
+    <!--<Reference Include="System.Runtime.WindowsRuntime.UI.Xaml">
+      <HintPath>C:\Program Files (x86)\Microsoft SDKs\NuGetPackages\System.Runtime.WindowsRuntime.UI.Xaml\4.0.1\ref\netcore50\System.Runtime.WindowsRuntime.UI.Xaml.dll</HintPath>
+    </Reference>-->
+    <!--<Reference Include="System.Runtime.WindowsRuntime">
+      <HintPath>C:\Program Files (x86)\Microsoft SDKs\NuGetPackages\System.Runtime.WindowsRuntime\4.0.11\ref\netcore50\System.Runtime.WindowsRuntime.dll</HintPath>
+    </Reference>-->
     <Reference Include="Windows.Foundation.FoundationContract">
       <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.17134.0\Windows.Foundation.FoundationContract\3.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
       <IsWinMDFile>true</IsWinMDFile>
@@ -20,8 +46,10 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="UwpDesktop" Version="10.0.14393.3" />
-  </ItemGroup>
+  <!--<ItemGroup>
+    <Reference Update="System.Runtime.WindowsRuntime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>true</SpecificVersion>
+    </Reference>
+  </ItemGroup>-->
 
 </Project>

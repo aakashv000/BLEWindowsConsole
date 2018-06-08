@@ -1,4 +1,5 @@
 ﻿using System;
+using BLEWindowsConsole.src.Driver;
 
 namespace BLEWindowsConsole
 {
@@ -6,8 +7,20 @@ namespace BLEWindowsConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
+            try
+            {
+                Console.WriteLine("Hello World!");
+
+                DiscoverDriver discoverDriver = new DiscoverDriver();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Main: " + ex.Message);
+            }
+            finally
+            {
+                Console.ReadKey();
+            }
         }
     }
 }
