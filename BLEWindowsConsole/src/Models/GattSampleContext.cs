@@ -82,7 +82,7 @@ namespace BLEWindowsConsole.src.Models
         private async void DevNodeWatcher_Added(DeviceWatcher sender, DeviceInformation args)
         {
             devNodes.Add(args);
-            Console.WriteLine("DevNodeWatcher_Added: " + args.ToString());
+            Console.WriteLine("DevNodeWatcher_Added: " + args.Kind + " " + args.Name + " " + args.Pairing + " " + args.Properties);
         }
 
         public void StartEnumeration()
@@ -142,7 +142,7 @@ namespace BLEWindowsConsole.src.Models
             if( !BLEDevices.Contains( device ))
             {
                 BLEDevices.Add(device);
-                Console.WriteLine("AddDeviceToList: " + device.bluetoothAddressAsString);
+                Console.WriteLine("AddDeviceToList: " + device.bluetoothAddressAsString + " " + device.name);
             }
         }
 
@@ -156,6 +156,7 @@ namespace BLEWindowsConsole.src.Models
                     if( d.bluetoothAddressAsUlong == args.BluetoothAddress)
                     {
                         d.serviceCount = args.Advertisement.ServiceUuids.Count();
+                        Console.WriteLine("AdvertisementWatcher_Received: " + args.Advertisement);
                     }
                 }
             }

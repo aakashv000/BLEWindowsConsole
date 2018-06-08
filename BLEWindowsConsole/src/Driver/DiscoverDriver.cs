@@ -11,7 +11,7 @@ namespace BLEWindowsConsole.src.Driver
 
         public DiscoverDriver()
         {
-            //context = GattSampleContext.context;          //Only use this to get <context> after it is initialised once
+            //context = GattSampleContext.context;          //***NOTE: Only use this to get <context> after it is initialised once
             context = new GattSampleContext();
             StartEnumeration();
         }
