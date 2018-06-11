@@ -39,6 +39,9 @@ namespace BLEWindowsConsole.src.Models
         /// </summary>
         private BluetoothLEAdvertisementWatcher advertisementWatcher;
 
+        //Gets or sets the selected Bluetooth device
+        public ObservableBLEDevice SelectedBLEDevice { get; set; } = null;
+
         // Gets or sets the list of available Bluetooth devices
         public ObservableCollection<ObservableBLEDevice> BLEDevices { get; set; } = new ObservableCollection<ObservableBLEDevice>();
 
@@ -53,7 +56,7 @@ namespace BLEWindowsConsole.src.Models
         //Initializes the app context
         private async void Init()
         {
-            BluetoothAdapter adapter = await BluetoothAdapter.GetDefaultAsync();
+            BluetoothAdapter adapter = await BluetoothAdapter.GetDefaultAsync();        //### TODO: handle this exception when adapter==null -> try reconnecting again!?
             if (adapter == null)
             {
                 Console.WriteLine("Error getting access to Bluetooth adapter. Do you have Bluetooth enabled?");
@@ -118,6 +121,23 @@ namespace BLEWindowsConsole.src.Models
             advertisementWatcher.Start();
         }
 
+        // Stop enumeration of bluetooth devices
+        public void StopEnumeration()
+        {
+            if (deviceWatcher != null)
+            {
+                //Unregister the event handlers
+                deviceWatcher.Added -= DeviceWatcher_Added;
+                advertisementWatcher.Received -= AdvertisementWatcher_Received;
+
+                //Stop the watchers
+                deviceWatcher.Stop();
+                deviceWatcher = null;
+                advertisementWatcher.Stop();
+                advertisementWatcher = null;
+            }
+        }
+
         private async void DeviceWatcher_Added( DeviceWatcher sender, DeviceInformation deviceInfo)
         {
             try
@@ -156,7 +176,11 @@ namespace BLEWindowsConsole.src.Models
                     if( d.bluetoothAddressAsUlong == args.BluetoothAddress)
                     {
                         d.serviceCount = args.Advertisement.ServiceUuids.Count();
-                        Console.WriteLine("AdvertisementWatcher_Received: " + args.Advertisement);
+                        IList<BluetoothLEAdvertisementDataSection> bleAdDataSections = args.Advertisement.DataSections;
+                        foreach( BluetoothLEAdvertisementDataSection dataSection in bleAdDataSections)
+                        {
+                            Console.WriteLine("AdvertisementWatcher_Received: " + dataSection.Data + " " + dataSection.DataType + " " + args.Advertisement.Flags.GetValueOrDefault() );
+                        }
                     }
                 }
             }
@@ -164,6 +188,20 @@ namespace BLEWindowsConsole.src.Models
             {
                 Console.WriteLine("AdvertisementWatcher_Received: " + ex.Message);
             }
+        }
+
+        public ObservableBLEDevice GetAvailableBLEDeviceByName( string name )
+        {
+            foreach( ObservableBLEDevice device in BLEDevices)
+            {
+                if( device.name == name)
+                {
+                    Console.WriteLine("GetAvailableBLEDeviceByName: device found successfully");
+                    return device;
+                }
+            }
+
+            return null;
         }
     }
 }

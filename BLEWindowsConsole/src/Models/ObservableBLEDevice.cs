@@ -115,7 +115,7 @@ namespace BLEWindowsConsole.src.Models
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Exception - " + ex.Message);
+                Console.WriteLine("Exception: " + ex.Message);
                 Debugger.Break();
             }
 
