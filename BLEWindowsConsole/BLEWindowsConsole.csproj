@@ -2,10 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
+    <!--<TargetFramework>net461</TargetFramework>-->
     <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
     <!--<ApplicationIcon />
     <StartupObject />-->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.0|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.3.0" />
-    <PackageReference Include="UwpDesktop" Version="10.0.14393.3" />
+    <PackageReference Include="Microsoft.NETCore" Version="5.0.2" />
+    <PackageReference Condition=" '$(TargetFramework)' == 'net461' " Include="System.Runtime.WindowsRuntime" Version="4.0.10" />
+    <PackageReference Condition=" '$(TargetFramework)' == 'netcoreapp2.0' " Include="System.Runtime.WindowsRuntime" Version="4.3.0" />
   </ItemGroup>
 
   <!--##### removed(commented out) the below assembly references and included the 2 above packages directly from NuGet, to remove the
@@ -45,6 +50,13 @@
     <!--<Reference Include="mscorlib">
       <HintPath>F:\Work\Enability\Tools\mscorlib\mscorlib.dll</HintPath>
     </Reference>-->
+    <!--<Reference Include="System.Runtime.WindowsRuntime">
+      <HintPath>C:\Users\Aakash Verma\.nuget\packages\system.runtime.windowsruntime\4.0.11\ref\netstandard1.2\System.Runtime.WindowsRuntime.dll</HintPath>
+    </Reference>-->
+    <Reference Include="Windows">
+      <HintPath>C:\Program Files (x86)\Windows Kits\10\UnionMetadata\Facade\Windows.WinMD</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
     <Reference Include="Windows.Foundation.FoundationContract">
       <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.17134.0\Windows.Foundation.FoundationContract\3.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
       <IsWinMDFile>true</IsWinMDFile>

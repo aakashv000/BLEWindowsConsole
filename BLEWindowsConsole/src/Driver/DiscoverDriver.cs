@@ -21,8 +21,8 @@ namespace BLEWindowsConsole.src.Driver
                 context.SelectedBLEDevice = value;
             }
         }
-        private string name;
-        private ObservableBLEDevice foundDevice = null;
+        //private string name;
+        //private ObservableBLEDevice foundDevice = null;
 
         public DiscoverDriver()
         {
@@ -30,43 +30,57 @@ namespace BLEWindowsConsole.src.Driver
             context = new GattSampleContext();
 
             StartEnumeration();
+
+            Console.WriteLine("Thread slept");
+            Thread.Sleep(35000);
+            Console.WriteLine("Thread awoke");
+
             ConnectToDeviceByName("ESP32 UART Test");
         }
 
-        public async void StartEnumeration()              //Was async
+        public async void StartEnumeration()
         {
             Console.WriteLine("DiscoverDriver.StartEnumeration()");
             context.StartEnumeration();
+            Console.WriteLine("DiscoverDriver.StartEnumeration(): Exiting");
         }
 
-        public async void StopEnumeration()                //Was async
+        public async void StopEnumeration()
         {
             Console.WriteLine("DiscoverDriver.StopEnumeration()");
             context.StopEnumeration();
         }
 
-        public async void ConnectToDeviceByName( string name )
+        public void ConnectToDeviceByName( string name )
         {
-            this.name = name;
-            var searchThread = new Thread(SearchDeviceByName_Thread);
-            searchThread.Start();
+            //this.name = name;
+            //var searchThread = new Thread(SearchDeviceByName_Thread);
+            //searchThread.Start();
+
+            SearchDeviceByName(name);
+            ConnectToSelectedDevice(SelectedDevice);
         }
 
-        public void SearchDeviceByName_Thread()
+        public void SearchDeviceByName( string name)
         {
-            while (true)
-            {
-                foundDevice = context.GetAvailableBLEDeviceByName(name);
-                if (foundDevice != null)
-                {
-                    SelectedDevice = foundDevice;
-                    break;
-                }
-                Thread.Sleep(5000);        //Wait for 5 secs before checking if the required device is available or not
-            }
-
-            ConnectToSelectedDevice(foundDevice);
+            SelectedDevice = context.GetAvailableBLEDeviceByName(name);
         }
+
+        //public void SearchDeviceByName_Thread()
+        //{
+        //    while (true)
+        //    {
+        //        foundDevice = context.GetAvailableBLEDeviceByName(name);
+        //        if (foundDevice != null)
+        //        {
+        //            SelectedDevice = foundDevice;
+        //            break;
+        //        }
+        //        Thread.Sleep(5000);        //Wait for 5 secs before checking if the required device is available or not
+        //    }
+
+        //    ConnectToSelectedDevice(foundDevice);
+        //}
 
         public async void ConnectToSelectedDevice( ObservableBLEDevice bleDevice)
         {
